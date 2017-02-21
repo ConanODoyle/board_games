@@ -1,0 +1,68 @@
+add check for player having spawned yet when challenging
+uttt highlight only winning tiles
+chess timer
+2 king stalemate
+chess turn notification
+fix moving too fast breaking timer
+
+
+this is a change in a file
+
+function msgImage(%string) {
+	for(%i = 0; %i <= getFieldCount(%string); %i++)
+		messageAll('', addTaggedString(getField(%string, %i)),
+			"<bitmap:white>", "<bitmap:black>");
+}
+[00:32:09] Badspot (0) joined.
+[00:33:21] Badspot (0) left.
+[00:33:26] Badspot (0) joined.
+[00:34:00] Badspot: c;
+[00:35:28] Badspot: You guys are like regular blockheads.
+[00:35:36] Badspot: And I like that.
+[00:47:09] Badspot: I have 350 more things to download
+[00:58:52] Badspot: 220
+[01:00:27] Badspot (0) joined.
+[01:02:55] Badspot: 200 more files
+[01:03:39] Badspot: i haven't joined the server yet
+[01:06:52] Badspot: oh is that a dab emote?
+[01:06:59] Badspot: poor design having the arms line up
+[01:07:14] Badspot: looks like a penguin holding a rocket launcher 
+[01:08:50] Badspot: The block rendering engine would require complete restructuring to advance further
+[01:08:59] Badspot: and it's just not motivating in the age of so many block games
+[01:09:38] Badspot: The "engine" myth is a result of marketing
+[01:10:04] Badspot: There is no engine that would do what blockland needs to do
+[01:12:45] Badspot: < 100
+[01:15:21] Badspot: I'm kind of done with pax
+[01:15:49] Badspot: It's expensive and a lot of work to show a game there
+[01:15:59] Badspot: as far as attending, i'm not really a fan boy for video games
+[01:16:24] Badspot: if i was going to show a game at pax, I'd probably walk around with a laptop stand to show people
+[01:16:31] Badspot: instead of spending like $2k on a booth
+01/01/17 01:17:29 Badspot spawned for the first time
+
+Entering [BotHolePackage]paintProjectile::onCollision(558, 1365186, 1364830, 1, -16.650887 -15.000338 9.069956, 0.878416 0.477896 0.000000)
+   Entering [Slayer_FxDtsBrick]paintProjectile::onCollision(558, 1365186, 1364830, 1, -16.650887 -15.000338 9.069956, 0.878416 0.477896 0.000000)
+      Entering paintProjectile::onCollision(558, 1365186, 1364830, 1, -16.650887 -15.000338 9.069956, 0.878416 0.477896 0.000000)
+         Entering Player::setTempColor(1364830, 0.921569 0.513726 0.674510 1, 2000, -16.6509 -15.0003 9.06996, 558)
+            Entering [TankPackage]ShapeBase::setNodeColor(1364830, pants, 0.921569 0.513726 0.674510 1)
+            Leaving [TankPackage]ShapeBase::setNodeColor() - return
+            Entering [TankPackage]ShapeBase::setNodeColor(1364830, LHand, 0.921569 0.513726 0.674510 1)
+            Leaving [TankPackage]ShapeBase::setNodeColor() - return
+            Entering [TankPackage]ShapeBase::setNodeColor(1364830, RHand, 0.921569 0.513726 0.674510 1)
+            Leaving [TankPackage]ShapeBase::setNodeColor() - return
+         Leaving Player::setTempColor() - return 216500
+      Leaving paintProjectile::onCollision() - return 216500
+   Leaving [Slayer_FxDtsBrick]paintProjectile::onCollision() - return 216500
+Leaving [BotHolePackage]paintProjectile::onCollision() - return 216500
+
+package die {
+	function serverCmdMessageSent(%cl, %msg) {
+		if ($die && isObject(%cl.player) && %msg !$= "") {
+			messageClient(%cl, '', "You died");
+			%cl.player.kill();
+			$die = 0;
+		} else if (trim(strlwr(%msg)) $= "die") {
+			$die = 1;
+		}
+		return parent::serverCmdMessageSent(%cl, %msg);
+	}
+}; activatepackage(die);

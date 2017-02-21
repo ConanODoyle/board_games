@@ -1,0 +1,193 @@
+[160509: OP_FUNC_DECL______________] function WheeledVehicleData::onCollision(%this, %obj, %col, %vec, %speed)
+[160526: OP_CALLFUNC_______________] %obj.getDamageState();
+[160533: OP_COMPARE_STR____________] %obj.getDamageState(); $= "Dead"
+[160534: OP_JMPIFNOT_______________] jump to 160537 if not (%obj.getDamageState(); $= "Dead")
+[160536: OP_RETURN_________________] return;
+[160545: OP_CALLFUNC_______________] %col.getDamagePercent();
+[160549: OP_CMPGE__________________] if %col.getDamagePercent(); >= 1
+[160550: OP_JMPIFNOT_______________] jump to 160553 if not %col.getDamagePercent(); >= 1
+[160552: OP_RETURN_________________] return;
+[160557: OP_SAVEVAR_UINT___________] %runOver = 0
+[160564: OP_SETCURFIELD____________] %obj.client
+[160569: OP_CALLFUNC_RESOLVE_______] isObject(%obj.client);
+[160573: OP_JMPIFFNOT______________] jump to 160593 if not isObject(%obj.client);
+[160579: OP_SETCURFIELD____________] %obj.client
+[160586: OP_SETCURFIELD____________] %col.client
+[160589: OP_CMPEQ__________________] if %col.client == %obj.client
+[160590: OP_JMPIFNOT_______________] jump to 160593 if not %col.client == %obj.client
+[160592: OP_RETURN_________________] return;
+[160597: OP_SAVEVAR_UINT___________] %canUse = 0
+[160604: OP_SETCURFIELD____________] %obj.spawnBrick
+[160609: OP_CALLFUNC_RESOLVE_______] isObject(%obj.spawnBrick);
+[160613: OP_JMPIFFNOT______________] jump to 160644 if not isObject(%obj.spawnBrick);
+[160621: OP_SETCURFIELD____________] %obj.spawnBrick
+[160625: OP_CALLFUNC_______________] %obj.spawnBrick.getGroup();
+[160630: OP_SETCURFIELD____________] %obj.spawnBrick.getGroup();.bl_id
+[160634: OP_CALLFUNC_RESOLVE_______] findClientByBL_ID(%obj.spawnBrick.getGroup();.bl_id);
+[160640: OP_SAVEVAR_STR____________] %vehicleOwner = findClientByBL_ID(%obj.spawnBrick.getGroup();.bl_id);
+[160642: OP_JMP____________________] jump to 160650
+[160648: OP_SAVEVAR_UINT___________] %vehicleOwner = 0
+[160656: OP_CALLFUNC_RESOLVE_______] isObject(%vehicleOwner);
+[160660: OP_JMPIFFNOT______________] jump to 160690 if not isObject(%vehicleOwner);
+[160675: OP_CALLFUNC_RESOLVE_______] getTrustLevel(%col, %obj);
+[160679: OP_CMPGE__________________] if getTrustLevel(%col, %obj); >= $TrustLevel::RideVehicle
+[160680: OP_JMPIFNOT_______________] jump to 160688 if not getTrustLevel(%col, %obj); >= $TrustLevel::RideVehicle
+[160686: OP_SAVEVAR_UINT___________] %canUse = 1
+[160688: OP_JMP____________________] jump to 160696
+[160694: OP_SAVEVAR_UINT___________] %canUse = 1
+[160708: OP_CALLFUNC_RESOLVE_______] miniGameCanUse(%col, %obj);
+[160712: OP_CMPEQ__________________] if miniGameCanUse(%col, %obj); == 1
+[160713: OP_JMPIFNOT_______________] jump to 160721 if not miniGameCanUse(%col, %obj); == 1
+[160719: OP_SAVEVAR_UINT___________] %canUse = 1
+[160733: OP_CALLFUNC_RESOLVE_______] miniGameCanUse(%col, %obj);
+[160737: OP_CMPEQ__________________] if miniGameCanUse(%col, %obj); == 0
+[160738: OP_JMPIFNOT_______________] jump to 160746 if not miniGameCanUse(%col, %obj); == 0
+[160744: OP_SAVEVAR_UINT___________] %canUse = 0
+[160758: OP_CALLFUNC_RESOLVE_______] miniGameCanDamage(%col, %obj);
+[160762: OP_CMPEQ__________________] if miniGameCanDamage(%col, %obj); == 1
+[160763: OP_JMPIFNOT_______________] jump to 160773 if not miniGameCanDamage(%col, %obj); == 1
+[160769: OP_SAVEVAR_UINT___________] %canDamage = 1
+[160771: OP_JMP____________________] jump to 160779
+[160777: OP_SAVEVAR_UINT___________] %canDamage = 0
+[160784: OP_SETCURFIELD____________] %this.minRunOverSpeed
+[160795: OP_CALLFUNC_RESOLVE_______] mClampF(%this.minRunOverSpeed, $Game::DefaultMinRunOverSpeed, "999");
+[160801: OP_SAVEVAR_STR____________] %minSpeed = mClampF(%this.minRunOverSpeed, $Game::DefaultMinRunOverSpeed, "999");
+[160809: OP_CALLFUNC_______________] %obj.getControllingObject();
+[160815: OP_CALLFUNC_RESOLVE_______] isObject(%obj.getControllingObject(););
+[160819: OP_NOTF___________________] !isObject(%obj.getControllingObject(););
+[160820: OP_JMPIFNOT_______________] jump to 160830 if not (!isObject(%obj.getControllingObject(););)
+[160827: OP_ADD____________________] %minSpeed + 2
+[160828: OP_SAVEVAR_FLT____________] %minSpeed = (%minSpeed + 2)
+[160837: OP_CALLFUNC_______________] %obj.getVelocity();
+[160847: OP_CALLFUNC_______________] %col.getVelocity();
+[160852: OP_CALLFUNC_RESOLVE_______] VectorSub(%obj.getVelocity();, %col.getVelocity(););
+[160857: OP_CALLFUNC_RESOLVE_______] VectorLen(VectorSub(%obj.getVelocity();, %col.getVelocity();););
+[160863: OP_SAVEVAR_STR____________] %relativeSpeed = VectorLen(VectorSub(%obj.getVelocity();, %col.getVelocity();););
+[160870: OP_CALLFUNC_______________] %col.getDataBlock();
+[160875: OP_SETCURFIELD____________] %col.getDataBlock();.canRide
+[160878: OP_JMPIFNOT_NP____________] jump to 160887 if not %col.getDataBlock();.canRide
+[160884: OP_SETCURFIELD____________] %this.rideAble
+[160887: OP_JMPIFNOT_NP____________] jump to 160899 if not %this.rideAble
+[160895: OP_SETCURFIELD____________] %this.nummountpoints
+[160898: OP_CMPGR__________________] if %this.nummountpoints > 0
+[160899: OP_JMPIFNOT_______________] jump to 161364 if not %this.nummountpoints > 0
+[160918: OP_CMPGR__________________] if (getSimTime(); - %col.lastMountTime) > $Game::MinMountTime
+[160919: OP_JMPIFNOT_______________] jump to 161362 if not (getSimTime(); - %col.lastMountTime) > $Game::MinMountTime
+[160927: OP_CALLFUNC_______________] %col.getPosition();
+[160935: OP_CALLFUNC_RESOLVE_______] getWord(%col.getPosition();, "2");
+[160941: OP_SAVEVAR_STR____________] %colZpos = getWord(%col.getPosition();, "2");
+[160949: OP_CALLFUNC_______________] %obj.getPosition();
+[160957: OP_CALLFUNC_RESOLVE_______] getWord(%obj.getPosition();, "2");
+[160963: OP_SAVEVAR_STR____________] %objZpos = getWord(%obj.getPosition();, "2");
+[160970: OP_ADD____________________] %objZpos + 0.2
+[160974: OP_CMPGR__________________] if %colZpos > (%objZpos + 0.2)
+[160975: OP_JMPIFNOT_______________] jump to 161356 if not %colZpos > (%objZpos + 0.2)
+[160980: OP_JMPIFFNOT______________] jump to 161193 if not %canUse
+[160986: OP_SAVEVAR_UINT___________] %i = 0
+[160992: OP_SETCURFIELD____________] %this.nummountpoints
+[160998: OP_CMPLT__________________] if %i < %this.nummountpoints
+[160999: OP_JMPIFNOT_______________] jump to 161191 if not %i < %this.nummountpoints
+[161010: OP_CALLFUNC_______________] %obj.getMountNodeObject(%i);
+[161016: OP_SAVEVAR_STR____________] %blockingObj = %obj.getMountNodeObject(%i);
+[161024: OP_CALLFUNC_RESOLVE_______] isObject(%blockingObj);
+[161028: OP_JMPIFFNOT______________] jump to 161113 if not isObject(%blockingObj);
+[161035: OP_CALLFUNC_______________] %blockingObj.getDataBlock();
+[161040: OP_SETCURFIELD____________] %blockingObj.getDataBlock();.rideAble
+[161043: OP_NOT____________________] !%blockingObj.getDataBlock();.rideAble
+[161044: OP_JMPIFNOT_______________] jump to 161048 if not (!%blockingObj.getDataBlock();.rideAble)
+[161046: OP_JMP____________________] jump to 161170
+[161057: OP_CALLFUNC_______________] %blockingObj.getMountedObject("0");
+[161061: OP_JMPIFFNOT______________] jump to 161065 if not %blockingObj.getMountedObject("0");
+[161063: OP_JMP____________________] jump to 161170
+[161078: OP_CALLFUNC_______________] %blockingObj.mountObject(%col, "0");
+[161090: OP_CALLFUNC_______________] %blockingObj.getControllingClient();
+[161094: OP_CMPEQ__________________] if %blockingObj.getControllingClient(); == 0
+[161095: OP_JMPIFNOT_______________] jump to 161111 if not %blockingObj.getControllingClient(); == 0
+[161107: OP_CALLFUNC_______________] %col.setControlObject(%blockingObj);
+[161111: OP_JMP____________________] jump to 161170
+[161127: OP_CALLFUNC_______________] %obj.mountObject(%col, %i);
+[161136: OP_CMPEQ__________________] if %i == 0
+[161137: OP_JMPIFNOT_______________] jump to 161168 if not %i == 0
+[161147: OP_CALLFUNC_______________] %obj.getControllingClient();
+[161151: OP_CMPEQ__________________] if %obj.getControllingClient(); == 0
+[161152: OP_JMPIFNOT_______________] jump to 161168 if not %obj.getControllingClient(); == 0
+[161164: OP_CALLFUNC_______________] %col.setControlObject(%obj);
+[161168: OP_JMP____________________] jump to 161191
+[161175: OP_ADD____________________] %i + 1
+[161176: OP_SAVEVAR_FLT____________] %i = (%i + 1)
+[161182: OP_SETCURFIELD____________] %this.nummountpoints
+[161188: OP_CMPLT__________________] if %i < %this.nummountpoints
+[161189: OP_JMPIF__________________] jump to 161001 if %i < %this.nummountpoints
+[161191: OP_JMP____________________] jump to 161354
+[161198: OP_SETCURFIELD____________] %obj.spawnBrick
+[161202: OP_CALLFUNC_______________] %obj.spawnBrick.getGroup();
+[161207: OP_SETCURFIELD____________] %obj.spawnBrick.getGroup();.name
+[161212: OP_SAVEVAR_STR____________] %ownerName = %obj.spawnBrick.getGroup();.name
+[161217: OP_ADVANCE_STR____________] %ownerName + ... 
+[161220: OP_REWIND_STR_____________] ...
+[161223: OP_SAVEVAR_STR____________] %msg = %ownerName @ " does not trust you enough to do that"
+[161231: OP_CMPEQ__________________] if $lastError == $LastError::Trust
+[161232: OP_JMPIFNOT_______________] jump to 161247 if not $lastError == $LastError::Trust
+[161237: OP_ADVANCE_STR____________] %ownerName + ... 
+[161240: OP_REWIND_STR_____________] ...
+[161243: OP_SAVEVAR_STR____________] %msg = %ownerName @ " does not trust you enough to ride."
+[161245: OP_JMP____________________] jump to 161324
+[161253: OP_CMPEQ__________________] if $lastError == $LastError::MiniGameDifferent
+[161254: OP_JMPIFNOT_______________] jump to 161292 if not $lastError == $LastError::MiniGameDifferent
+[161261: OP_SETCURFIELD____________] %col.client
+[161265: OP_SETCURFIELD____________] %col.client.miniGame
+[161270: OP_CALLFUNC_RESOLVE_______] isObject(%col.client.miniGame);
+[161274: OP_JMPIFFNOT______________] jump to 161284 if not isObject(%col.client.miniGame);
+[161280: OP_SAVEVAR_STR____________] %msg = "This vehicle is not part of the mini-game."
+[161282: OP_JMP____________________] jump to 161290
+[161288: OP_SAVEVAR_STR____________] %msg = "This vehicle is part of a mini-game."
+[161290: OP_JMP____________________] jump to 161324
+[161298: OP_CMPEQ__________________] if $lastError == $LastError::MiniGameNotYours
+[161299: OP_JMPIFNOT_______________] jump to 161309 if not $lastError == $LastError::MiniGameNotYours
+[161305: OP_SAVEVAR_STR____________] %msg = "You do not own this vehicle."
+[161307: OP_JMP____________________] jump to 161324
+[161315: OP_CMPEQ__________________] if $lastError == $LastError::NotInMiniGame
+[161316: OP_JMPIFNOT_______________] jump to 161324 if not $lastError == $LastError::NotInMiniGame
+[161322: OP_SAVEVAR_STR____________] %msg = "This vehicle is not part of the mini-game."
+[161329: OP_SETCURFIELD____________] %col.client
+[161333: OP_TAG_TO_STR_____________] 'CenterPrint'
+[161344: OP_CALLFUNC_RESOLVE_______] commandToClient(%col.client, 'CenterPrint', %msg, "1");
+[161352: OP_SAVEVAR_UINT___________] %runOver = 1
+[161354: OP_JMP____________________] jump to 161362
+[161360: OP_SAVEVAR_UINT___________] %runOver = 1
+[161362: OP_JMP____________________] jump to 161370
+[161368: OP_SAVEVAR_UINT___________] %runOver = 1
+[161373: OP_JMPIFFNOT______________] jump to 161586 if not %canDamage
+[161378: OP_JMPIFFNOT______________] jump to 161515 if not %runOver
+[161389: OP_CALLFUNC_______________] %col.getType();
+[161393: OP_BITAND_________________] %col.getType(); & $TypeMasks::PlayerObjectType
+[161394: OP_JMPIFNOT_______________] jump to 161515 if not (%col.getType(); & $TypeMasks::PlayerObjectType)
+[161402: OP_CALLFUNC_______________] %obj.getVelocity();
+[161407: OP_CALLFUNC_RESOLVE_______] VectorLen(%obj.getVelocity(););
+[161413: OP_SAVEVAR_STR____________] %vehicleSpeed = VectorLen(%obj.getVelocity(););
+[161421: OP_CMPGR__________________] if %vehicleSpeed > %minSpeed
+[161422: OP_JMPIFNOT_______________] jump to 161515 if not %vehicleSpeed > %minSpeed
+[161428: OP_SETCURFIELD____________] %this.runOverDamageScale
+[161433: OP_SAVEVAR_STR____________] %damageScale = %this.runOverDamageScale
+[161441: OP_COMPARE_STR____________] %damageScale $= ""
+[161442: OP_JMPIFNOT_______________] jump to 161451 if not (%damageScale $= "")
+[161449: OP_SAVEVAR_STR____________] %damageScale = $Game::DefaultRunOverDamageScale
+[161455: OP_SETCURFIELD____________] %this.damageType
+[161460: OP_SAVEVAR_STR____________] %damageType = %this.damageType
+[161468: OP_COMPARE_STR____________] %damageType $= ""
+[161469: OP_JMPIFNOT_______________] jump to 161478 if not (%damageType $= "")
+[161476: OP_SAVEVAR_STR____________] %damageType = $DamageType::Vehicle
+[161484: OP_MUL____________________] %vehicleSpeed * %damageScale
+[161487: OP_SAVEVAR_FLT____________] %damageAmt = (%vehicleSpeed * %damageScale)
+[161511: OP_CALLFUNC_______________] %col.Damage(%obj, %pos, %damageAmt, %damageType);
+[161519: OP_SETCURFIELD____________] %this.runOverPushScale
+[161524: OP_SAVEVAR_STR____________] %pushScale = %this.runOverPushScale
+[161532: OP_COMPARE_STR____________] %pushScale $= ""
+[161533: OP_JMPIFNOT_______________] jump to 161542 if not (%pushScale $= "")
+[161540: OP_SAVEVAR_STR____________] %pushScale = $Game::DefaultRunOverPushScale
+[161547: OP_CALLFUNC_______________] %obj.getVelocity();
+[161553: OP_SAVEVAR_STR____________] %pushVec = %obj.getVelocity();
+[161564: OP_CALLFUNC_RESOLVE_______] VectorScale(%pushVec, %pushScale);
+[161570: OP_SAVEVAR_STR____________] %pushVec = VectorScale(%pushVec, %pushScale);
+[161582: OP_CALLFUNC_______________] %col.setVelocity(%pushVec);
+[161586: OP_RETURN_________________] return; of onCollision

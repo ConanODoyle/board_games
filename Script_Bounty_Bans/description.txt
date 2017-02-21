@@ -1,0 +1,4 @@
+Script_Bounty_Ban
+By: Conan
+Commissioned by Skill4Life
+When you get banned, instead a bounty gets put on your head. Once you die/get killed or disconnect, you get banned.

@@ -1,0 +1,7 @@
+Server_Board_Games V0.8
+By: Conan, Simba, Pah
+Tested by: Element, Skill4Life, bike
+Comprehensive board game mod. Games included:
+Othello
+Ultimate Tic Tac Toe
+Connect 4
